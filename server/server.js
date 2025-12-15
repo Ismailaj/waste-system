@@ -8,6 +8,7 @@ import collectionRoutes from "./routes/collectionRoutes.js";
 import routeRoutes from "./routes/routeRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use("/api/collections", collectionRoutes);
 app.use("/api/routes", routeRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {

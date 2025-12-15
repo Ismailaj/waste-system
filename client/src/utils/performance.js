@@ -159,11 +159,13 @@ export const LazyImage = ({
 
 // Memoization helper for expensive calculations
 export const useMemoizedValue = (factory, deps) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return React.useMemo(factory, deps);
 };
 
 // Callback memoization
 export const useMemoizedCallback = (callback, deps) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return React.useCallback(callback, deps);
 };
 
