@@ -57,18 +57,12 @@ export const RippleEffect = ({ children, onClick, disabled = false, ...props }) 
             backgroundColor: 'rgba(255, 255, 255, 0.6)',
             transform: 'scale(0)',
             animation: 'ripple 0.6s linear',
+            animationName: 'ripple',
             pointerEvents: 'none',
           }}
         />
       ))}
-      <style jsx>{`
-        @keyframes ripple {
-          to {
-            transform: scale(4);
-            opacity: 0;
-          }
-        }
-      `}</style>
+
     </div>
   );
 };
@@ -145,12 +139,7 @@ export const ProgressBar = ({
           />
         )}
       </div>
-      <style jsx>{`
-        @keyframes progress-shine {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+
     </div>
   );
 };
@@ -239,18 +228,7 @@ export const PulseIndicator = ({
           animation: 'pulse-ring 2s infinite',
         }}
       />
-      <style jsx>{`
-        @keyframes pulse-ring {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(2);
-            opacity: 0;
-          }
-        }
-      `}</style>
+
     </div>
   );
 };
