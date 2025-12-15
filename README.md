@@ -1,5 +1,5 @@
 # Waste Management System
--
+
 A comprehensive waste management system built with the MERN stack (MongoDB, Express.js, React, Node.js) that facilitates efficient coordination between residents, waste collectors, and administrators.
 
 ## Features
@@ -186,10 +186,8 @@ npm run client:test
 - [Design Document](docs/design.md) - System architecture and design decisions
 - [Implementation Tasks](docs/tasks.md) - Development progress and task tracking
 
-## License
-
-This project is licensed under the ISC License.
 
 ## Author
+
 
 Ismail Aj
