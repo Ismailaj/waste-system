@@ -65,13 +65,23 @@ export const authorize = (...roles) => {
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: `Access denied. Required role: ${roles.join(' or ')}`
+        message: `Access denied. Required role: ${roles.join(' or ')}. Your role: ${req.user.role}`,
+        userRole: req.user.role,
+        requiredRoles: roles
       });
     }
 
     next();
   };
 };
+
+/**
+ * Role-specific middleware shortcuts
+ */
+export const requireAdmin = authorize('admin');
+export const requireCollector = authorize('collector', 'admin');
+export const requireResident = authorize('resident', 'admin');
+export const requireAdminOrCollector = authorize('admin', 'collector');
 
 /**
  * Optional authentication middleware - doesn't fail if no token

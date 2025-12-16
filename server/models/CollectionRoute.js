@@ -67,10 +67,9 @@ collectionRouteSchema.index({ date: 1 });
 collectionRouteSchema.index({ status: 1 });
 
 // Compound indexes for common queries
-collectionRouteSchema.index({ collectorId: 1, date: 1 });
 collectionRouteSchema.index({ collectorId: 1, status: 1 });
 
-// Ensure unique route per collector per date
+// Ensure unique route per collector per date (this also serves as the compound index)
 collectionRouteSchema.index({ collectorId: 1, date: 1 }, { unique: true });
 
 // Pre-save middleware to validate optimized order

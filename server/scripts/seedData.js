@@ -165,18 +165,55 @@ const seedData = async () => {
     const wasteCategories = ['organic', 'recyclable', 'hazardous', 'general'];
     const statuses = ['pending', 'assigned', 'in-progress', 'completed'];
     
+    const wasteInstructions = {
+      organic: [
+        'Compost bin by kitchen door',
+        'Green waste bags in backyard',
+        'Food scraps in sealed container',
+        'Garden waste by fence'
+      ],
+      recyclable: [
+        'Blue bins by garage',
+        'Sorted recyclables in containers',
+        'Cardboard flattened and bundled',
+        'Glass bottles in separate box'
+      ],
+      hazardous: [
+        'Batteries in sealed bag',
+        'Paint cans in garage - handle carefully',
+        'Electronic waste - fragile items',
+        'Chemical containers - wear gloves'
+      ],
+      general: [
+        'Regular trash bags by curb',
+        'Mixed waste in black bins',
+        'Household items in bags',
+        'General refuse containers'
+      ]
+    };
+    
     // Create requests for each resident
     for (let i = 0; i < residentUsers.length; i++) {
       const resident = residentUsers[i];
-      const numRequests = Math.floor(Math.random() * 4) + 2; // 2-5 requests per resident
+      const numRequests = Math.floor(Math.random() * 4) + 3; // 3-6 requests per resident
       
       for (let j = 0; j < numRequests; j++) {
         const wasteCategory = wasteCategories[Math.floor(Math.random() * wasteCategories.length)];
-        const status = j === 0 ? 'pending' : statuses[Math.floor(Math.random() * statuses.length)];
         
-        // Create dates in the past 30 days
+        // More realistic status distribution
+        let status;
+        if (j === 0) {
+          status = 'pending'; // Always have at least one pending
+        } else if (j === 1) {
+          status = Math.random() > 0.5 ? 'assigned' : 'in-progress';
+        } else {
+          status = statuses[Math.floor(Math.random() * statuses.length)];
+        }
+        
+        // Create dates in the past 45 days with more recent bias
+        const daysAgo = Math.floor(Math.random() * 45);
         const createdDate = new Date();
-        createdDate.setDate(createdDate.getDate() - Math.floor(Math.random() * 30));
+        createdDate.setDate(createdDate.getDate() - daysAgo);
         
         const request = {
           requesterId: resident._id,
@@ -187,22 +224,10 @@ const seedData = async () => {
               lat: 40.7128 + (Math.random() - 0.5) * 0.1, // NYC area with variation
               lng: -74.0060 + (Math.random() - 0.5) * 0.1
             },
-            instructions: [
-              'Leave bins by the front door',
-              'Ring doorbell when collecting',
-              'Bins are in the garage',
-              'Side entrance preferred',
-              'Call before pickup'
-            ][Math.floor(Math.random() * 5)]
+            instructions: wasteInstructions[wasteCategory][Math.floor(Math.random() * wasteInstructions[wasteCategory].length)]
           },
           status,
-          notes: [
-            'Regular weekly pickup',
-            'Extra bags this week',
-            'Heavy items included',
-            'Fragile materials',
-            'Time-sensitive pickup'
-          ][Math.floor(Math.random() * 5)],
+          notes: `${wasteCategory.charAt(0).toUpperCase() + wasteCategory.slice(1)} waste collection - ${['Regular pickup', 'Extra volume', 'Urgent request', 'Scheduled service'][Math.floor(Math.random() * 4)]}`,
           createdAt: createdDate,
           updatedAt: createdDate
         };
@@ -213,9 +238,14 @@ const seedData = async () => {
           
           if (status === 'completed') {
             const completedDate = new Date(createdDate);
-            completedDate.setDate(completedDate.getDate() + Math.floor(Math.random() * 7) + 1);
+            completedDate.setDate(completedDate.getDate() + Math.floor(Math.random() * 5) + 1);
             request.completedDate = completedDate;
             request.updatedAt = completedDate;
+          } else if (status === 'assigned') {
+            // Set scheduled date for assigned requests
+            const scheduledDate = new Date();
+            scheduledDate.setDate(scheduledDate.getDate() + Math.floor(Math.random() * 7) + 1);
+            request.scheduledDate = scheduledDate;
           }
         }
         
@@ -282,10 +312,24 @@ const seedData = async () => {
     console.log(`   🗺️ Collection Routes: ${createdRoutes.length}`);
     
     console.log('\n🔑 Login Credentials:');
-    console.log('   Admin: admin@wastemanagement.com / Admin123!');
-    console.log('   Manager: manager@wastemanagement.com / Manager123!');
-    console.log('   Collector: john.collector@wastemanagement.com / Collector123!');
-    console.log('   Resident: alice.resident@email.com / Resident123!');
+    console.log('   👑 ADMIN USERS:');
+    console.log('      - admin@wastemanagement.com / Admin123!');
+    console.log('      - manager@wastemanagement.com / Manager123!');
+    console.log('   🚛 COLLECTOR USERS:');
+    console.log('      - john.collector@wastemanagement.com / Collector123!');
+    console.log('      - jane.collector@wastemanagement.com / Collector123!');
+    console.log('      - mike.collector@wastemanagement.com / Collector123!');
+    console.log('   🏠 RESIDENT USERS:');
+    console.log('      - alice.resident@email.com / Resident123!');
+    console.log('      - bob.resident@email.com / Resident123!');
+    console.log('      - carol.resident@email.com / Resident123!');
+    console.log('      - david.resident@email.com / Resident123!');
+    console.log('      - emma.resident@email.com / Resident123!');
+    
+    console.log('\n📋 ROLE CAPABILITIES:');
+    console.log('   👑 Admins can: Manage users, assign collections, view reports, create routes');
+    console.log('   🚛 Collectors can: View assigned routes, update collection status');
+    console.log('   🏠 Residents can: Create collection requests, view their own requests');
     
     process.exit(0);
     
